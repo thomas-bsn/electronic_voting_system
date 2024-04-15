@@ -46,20 +46,20 @@ def DSA_verify(message, r, s, public_key, PARAM_P, PARAM_Q, PARAM_G):
 
 # On teste les parametres m x et k et on regarde si on obtient les valeurs attendues
 
-# expected_r = 0x5ddf26ae653f5583e44259985262c84b483b74be46dec74b07906c5896e26e5a
-# expected_s = 0x194101d2c55ac599e4a61603bc6667dcc23bd2e9bdbef353ec3cb839dcce6ec1
+expected_r = 0x5ddf26ae653f5583e44259985262c84b483b74be46dec74b07906c5896e26e5a
+expected_s = 0x194101d2c55ac599e4a61603bc6667dcc23bd2e9bdbef353ec3cb839dcce6ec1
 
-# m = "An important message !"
-# k = 0x7e7f77278fe5232f30056200582ab6e7cae23992bca75929573b779c62ef4759
-# x = 0x49582493d17932dabd014bb712fc55af453ebfb2767537007b0ccff6e857e6a3
+m = "An important message !"
+k = 0x7e7f77278fe5232f30056200582ab6e7cae23992bca75929573b779c62ef4759
+x = 0x49582493d17932dabd014bb712fc55af453ebfb2767537007b0ccff6e857e6a3
 
-# r, s = DSA_sign(m, x, k, PARAM_P, PARAM_Q, PARAM_G)
+r, s = DSA_sign(m, x, k, PARAM_P, PARAM_Q, PARAM_G)
 
-# print(hex(r)[2:])
-# print(hex(s)[2:])
-# expected_r_hex = hex(expected_r)[2:].lower()  # Convertit en chaîne hexadécimale et en minuscules.
-# expected_s_hex = hex(expected_s)[2:].lower()  # Convertit en chaîne hexadécimale et en minuscules.
-# print(hex(r)[2:].lower() == expected_r_hex)
-# print(hex(s)[2:].lower() == expected_s_hex)
+print(hex(r)[2:])
+print(hex(s)[2:])
+expected_r_hex = hex(expected_r)[2:].lower()  # Convertit en chaîne hexadécimale et en minuscules.
+expected_s_hex = hex(expected_s)[2:].lower()  # Convertit en chaîne hexadécimale et en minuscules.
+print(hex(r)[2:].lower() == expected_r_hex)
+print(hex(s)[2:].lower() == expected_s_hex)
 
 
