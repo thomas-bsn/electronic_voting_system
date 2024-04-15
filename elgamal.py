@@ -81,7 +81,7 @@ m3 = 1  # Un vote pour
 m4 = 1  # Un vote pour
 m5 = 0  # Un vote contre
 
-def homomorphic_addition(m1, m2, m3, m4, m5, PARAM_P, PARAM_G):
+def homomorphic_addition(m1, m2, m3, m4, m5):
     # Génération des clés El Gamal
     private_key, public_key = EG_generate_keys()
 
@@ -105,8 +105,5 @@ def homomorphic_addition(m1, m2, m3, m4, m5, PARAM_P, PARAM_G):
     # Vérification que la somme décodée est égale à la somme des messages originaux
     return m_decoded == (m1 + m2 + m3 + m4 + m5)
 
-    
 
-
-result = homomorphic_addition(m1, m2, m3, m4, m5, PARAM_P, PARAM_G)
-print(result)  # Doit afficher True si l'homomorphisme fonctionne correctement
+print(homomorphic_addition(m1, m2, m3, m4, m5))
