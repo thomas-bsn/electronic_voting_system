@@ -14,12 +14,14 @@ def H(message):
     h = SHA256.new(message)
     return (int(h.hexdigest(), 16))
 
-def ECDSA_generate_nonce("""TBC"""):
-    return """TBC"""
+def ECDSA_generate_nonce():
+    return randint(1, ORDER-1)
 
 
-def ECDSA_generate_keys("""TBC"""):
-    return ("""TBC""")
+def ECDSA_generate_keys():
+    private_key = randint(1, ORDER-1)
+    public_key = mult(private_key, BaseU, BaseV, p)
+    return private_key, public_key
 
 
 def ECDSA_sign("""TBC"""):
