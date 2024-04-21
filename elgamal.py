@@ -106,4 +106,4 @@ def homomorphic_addition(m1, m2, m3, m4, m5):
     return m_decoded == (m1 + m2 + m3 + m4 + m5)
 
 
-print(homomorphic_addition(m1, m2, m3, m4, m5))
+# print(homomorphic_addition(m1, m2, m3, m4, m5))
