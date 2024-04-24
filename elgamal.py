@@ -36,7 +36,7 @@ def EGM_encrypt(m, y, PARAM_P, PARAM_G):
 def EGM_encrypt2(m, y, PARAM_P, PARAM_G):
     k = randint(2, PARAM_P - 1)
     c1 = pow(PARAM_G, k, PARAM_P)
-    c2 = (m + pow(y, k, PARAM_P)) % PARAM_P
+    c2 = pow(y, k, PARAM_P)*pow(PARAM_G, m, PARAM_P) % PARAM_P
     return (c1, c2)
 
 def EG_decrypt(c1, c2, x, PARAM_P):
@@ -81,29 +81,33 @@ m3 = 1  # Un vote pour
 m4 = 1  # Un vote pour
 m5 = 0  # Un vote contre
 
-def homomorphic_addition(m1, m2, m3, m4, m5):
+L = [m1, m2, m3, m4, m5]
+
+def homomorphic_addition(L):
     # Génération des clés El Gamal
     private_key, public_key = EG_generate_keys()
 
     # Chiffrement des messages m1, m2, m3, m4 et m5
-    r1, c1 = EGM_encrypt2(m1, public_key, PARAM_P, PARAM_G)
-    r2, c2 = EGM_encrypt2(m2, public_key, PARAM_P, PARAM_G)
-    r3, c3 = EGM_encrypt2(m3, public_key, PARAM_P, PARAM_G)
-    r4, c4 = EGM_encrypt2(m4, public_key, PARAM_P, PARAM_G)
-    r5, c5 = EGM_encrypt2(m5, public_key, PARAM_P, PARAM_G)
+    r_list, c_list = [], []
+    for i in range(len(L)):
+        r, c = EGM_encrypt2(L[i], public_key, PARAM_P, PARAM_G)
+        r_list.append(r)
+        c_list.append(c)
 
-    # Opération homomorphe sur les messages chiffrés
-    r6 = (r1 * r2 * r3 * r4 * r5) % PARAM_P
-    c6 = (c1 + c2 + c3 + c4 + c5) % PARAM_P
+    r = 1
+    c = 1
+    for i in range(len(L)):
+        r = (r * r_list[i]) % PARAM_P
+        c = (c * c_list[i]) % PARAM_P
 
     # Déchiffrement du résultat homomorphe
-    gm = EG_decrypt(r6, c6, private_key, PARAM_P)
+    gm = EG_decrypt(r, c, private_key, PARAM_P)
 
     # Utilisation de bruteLog pour trouver m à partir de g^m
     m_decoded = bruteLog(PARAM_G, gm, PARAM_P)
 
     # Vérification que la somme décodée est égale à la somme des messages originaux
-    return m_decoded == (m1 + m2 + m3 + m4 + m5)
+    return m_decoded == sum(L)
 
 
-print(homomorphic_addition(m1, m2, m3, m4, m5))
+print(homomorphic_addition(L))
