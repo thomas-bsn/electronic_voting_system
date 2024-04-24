@@ -1,6 +1,7 @@
 from Crypto.Random import random
 from Crypto.Hash import SHA256
 from algebra import mod_inv
+from Crypto.PublicKey import DSA
 
 ## parameters from MODP Group 24 -- Extracted from RFC 5114
 
