@@ -51,21 +51,16 @@ m1 = 0x26616b7368f687c5c3142f806d500d2ce57b1182c9b25bf4efa09529424b
 m2 = 0x1c1c871caabca15828cf08ee3aa3199000b94ed15e743c3
 
 def homomorphic_multiplication(m1, m2):
-    # Génération des clés El Gamal
     private_key, public_key = EG_generate_keys()
 
-    # Chiffrement des messages m1 et m2
     r1, c1 = EGM_encrypt(m1, public_key, PARAM_P, PARAM_G)
     r2, c2 = EGM_encrypt(m2, public_key, PARAM_P, PARAM_G)
 
-    # Opération homomorphe sur les messages chiffrés
     r3 = (r1 * r2) % PARAM_P
     c3 = (c1 * c2) % PARAM_P
 
-    # Déchiffrement du résultat homomorphe
     m3 = EG_decrypt(r3, c3, private_key, PARAM_P)
 
-    # Vérification que m3 est égal à m1 multiplié par m2 modulo PARAM_P
     if m3 == (m1 * m2) % PARAM_P:
         return True
     else:
@@ -75,39 +70,19 @@ def homomorphic_multiplication(m1, m2):
 
 # Homomorphic encryption : additive version 
 
-m1 = 1  # Un vote pour
-m2 = 0  # Un vote contre
-m3 = 1  # Un vote pour
-m4 = 1  # Un vote pour
-m5 = 0  # Un vote contre
-
-L = [m1, m2, m3, m4, m5]
-
 def homomorphic_addition(L):
-    # Génération des clés El Gamal
     private_key, public_key = EG_generate_keys()
 
-    # Chiffrement des messages m1, m2, m3, m4 et m5
-    r_list, c_list = [], []
-    for i in range(len(L)):
-        r, c = EGM_encrypt2(L[i], public_key, PARAM_P, PARAM_G)
-        r_list.append(r)
-        c_list.append(c)
+    r, c = 1, 1
+    for m in L:
+        r_i, c_i = EGM_encrypt2(m, public_key, PARAM_P, PARAM_G)
+        r = (r * r_i) % PARAM_P 
+        c = (c * c_i) % PARAM_P 
 
-    r = 1
-    c = 1
-    for i in range(len(L)):
-        r = (r * r_list[i]) % PARAM_P
-        c = (c * c_list[i]) % PARAM_P
-
-    # Déchiffrement du résultat homomorphe
     gm = EG_decrypt(r, c, private_key, PARAM_P)
 
-    # Utilisation de bruteLog pour trouver m à partir de g^m
     m_decoded = bruteLog(PARAM_G, gm, PARAM_P)
 
-    # Vérification que la somme décodée est égale à la somme des messages originaux
     return m_decoded == sum(L)
 
-
-print(homomorphic_addition(L))
+print(homomorphic_addition([1, 0, 1, 1, 0]))
