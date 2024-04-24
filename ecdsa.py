@@ -18,10 +18,9 @@ def ECDSA_generate_nonce():
     return randint(1, ORDER-1)
 
 
-def ECDSA_generate_keys():
-    private_key = randint(1, ORDER-1)
-    public_key = mult(private_key, BaseU, BaseV, p)
-    return private_key, public_key
+def ECDSA_generate_keys(pkey):
+    res = mult(pkey, BaseU, BaseV, p)
+    return pkey, res
 
 
 def ECDSA_sign(message, private_key, nonce):
@@ -39,7 +38,7 @@ def ECDSA_verify(message, public_key, r, s):
     u1 = (z * w) % ORDER
     u2 = (r * w) % ORDER
     x1, y1 = mult(u1, BaseU, BaseV, p)
-    x2, y2 = mult(u2, public_key[0], public_key[1], p)
+    x2, y2 = mult(u2, *public_key, p)
     x, y = add(x1, y1, x2, y2, p)
     return r == x % ORDER
 
@@ -53,7 +52,7 @@ m = b"A very very important message !"
 x = 0xc841f4896fe86c971bedbcf114a6cfd97e4454c9be9aba876d5a195995e2ba8
 k = 0x2c92639dcf417afeae31e0f8fddc8e48b3e11d840523f54aaa97174221faee6
 
-private_key, public_key = ECDSA_generate_keys()
+private_key, public_key = ECDSA_generate_keys(x)
 r, s = ECDSA_sign(m, x, k)
 
 print(hex(r)[2:])
@@ -62,3 +61,4 @@ expected_r_hex = hex(expected_r)[2:].lower()  # Convertit en chaîne hexadécima
 expected_s_hex = hex(expected_s)[2:].lower()  # Convertit en chaîne hexadécimale et en minuscules.
 print(hex(r)[2:].lower() == expected_r_hex)
 print(hex(s)[2:].lower() == expected_s_hex)
+print(ECDSA_verify(m, public_key, r, s))
