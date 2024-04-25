@@ -85,4 +85,4 @@ def homomorphic_addition(L):
 
     return m_decoded == sum(L)
 
-print(homomorphic_addition([1, 0, 1, 1, 0]))
+# print(homomorphic_addition([1, 0, 1, 1, 0]))
